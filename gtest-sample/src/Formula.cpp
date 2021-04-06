@@ -1,4 +1,4 @@
-#include "sample/Formula.h"
+#include "Formula.h"
 
 int Formula::bla(int arg1)
 {

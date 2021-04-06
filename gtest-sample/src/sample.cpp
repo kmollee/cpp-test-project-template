@@ -1,5 +1,5 @@
 #include <iostream>
-#include "sample/Formula.h"
+#include "Formula.h"
 
 int main()
 {

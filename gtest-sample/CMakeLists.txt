@@ -7,7 +7,10 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(src)
 include_directories(include)
 add_subdirectory(src)
+#set(BUILD_GMOCK ON CACHE BOOL "" FORCE)
 add_subdirectory(lib/googletest)
 
-add_subdirectory(test)
 enable_testing()
+add_subdirectory(test)
+
+
