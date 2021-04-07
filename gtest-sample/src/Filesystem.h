@@ -4,6 +4,7 @@
 
 class IFileSystem {
     public:
+        virtual ~IFileSystem() = default;
         virtual bool checkFileExist(const std::string &path) const = 0;
 };
 
