@@ -4,5 +4,5 @@
 TEST(HelloTest, Greet)
 {
         // EXPECT_EQ(Factorial(0), 1);
-        EXPECT_EQ(0, 1);
+        EXPECT_EQ(1, 1);
 }

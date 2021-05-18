@@ -11,3 +11,6 @@ target_link_libraries(${TEST_BINARY} PUBLIC ${CMAKE_PROJECT_NAME}_lib gmock gtes
 add_custom_target(check
         COMMAND env CTEST_OUTPUT_ON_FAILURE=1 GTEST_COLOR=1 ${CMAKE_CTEST_COMMAND}
         DEPENDS ${TEST_BINARY})
+
+include(GoogleTest)
+gtest_discover_tests(${CMAKE_PROJECT_NAME}_test)
