@@ -7,9 +7,6 @@ std::string currencyToStr(Currency currency)
                 return "FRANC";
         case Currency::USD:
                 return "USD";
-
-        case Currency::TWD:
-                return "TWD";
         default:
                 return "DEFAULT";
         }
