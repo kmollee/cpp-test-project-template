@@ -99,15 +99,64 @@ TEST(CurrencyTest, FrancMultiply)
 
 TEST(CurrencyTest, GetCurrency)
 {
-        EXPECT_EQ(MoneyFactory::Dollar(2).currency(), "USD");
-        EXPECT_EQ(MoneyFactory::Franc(0).currency(), "Franc");
+        EXPECT_EQ(MoneyFactory::Dollar(2).currency(), Currency::USD);
+        EXPECT_EQ(MoneyFactory::Franc(0).currency(), Currency::FRANC);
 }
 
 TEST(CurrencyTest, Addition)
 {
-        EXPECT_EQ(MoneyFactory::Dollar(2) + MoneyFactory::Dollar(3),
+        Bank bank;
+        bank.registRate(Currency::USD, Currency::FRANC, 2.0);
+        bank.registRate(Currency::FRANC, Currency::USD, 0.5);
+
+        EXPECT_EQ(bank.reduce(MoneyFactory::Dollar(2) + MoneyFactory::Dollar(3),
+                              Currency::USD),
                   MoneyFactory::Dollar(5));
 
-        EXPECT_EQ(MoneyFactory::Franc(6) + MoneyFactory::Franc(7),
+        EXPECT_EQ(bank.reduce(MoneyFactory::Franc(6) + MoneyFactory::Franc(7),
+                              Currency::FRANC),
                   MoneyFactory::Franc(13));
+
+        EXPECT_EQ(bank.reduce(MoneyFactory::Franc(6), Currency::FRANC),
+                  MoneyFactory::Franc(6));
+}
+
+TEST(CurrencyTest, Exchange)
+{
+        Bank bank;
+        bank.registRate(Currency::USD, Currency::FRANC, 2.0);
+        bank.registRate(Currency::FRANC, Currency::USD, 0.5);
+
+        EXPECT_EQ(bank.reduce(MoneyFactory::Dollar(2), Currency::USD),
+                  MoneyFactory::Dollar(2))
+                << "compare self fail";
+
+        EXPECT_EQ(bank.reduce(MoneyFactory::Franc(2), Currency::FRANC),
+                  MoneyFactory::Franc(2))
+                << "compare self fail";
+
+        EXPECT_EQ(bank.reduce(MoneyFactory::Dollar(2), Currency::FRANC),
+                  MoneyFactory::Franc(4));
+
+        EXPECT_EQ(bank.reduce(MoneyFactory::Dollar(2) + MoneyFactory::Franc(1),
+                              Currency::FRANC),
+                  MoneyFactory::Franc(5));
+}
+
+TEST(CurrencyTest, ExprTimes)
+{
+        Bank bank;
+        bank.registRate(Currency::USD, Currency::FRANC, 2.0);
+        bank.registRate(Currency::FRANC, Currency::USD, 0.5);
+
+        EXPECT_EQ(bank.reduce(Expr(MoneyFactory::Dollar(2)).times(2),
+                              Currency::USD),
+                  MoneyFactory::Dollar(4));
+
+        // (2+4) * 2
+        EXPECT_EQ(bank.reduce(Expr(MoneyFactory::Dollar(2),
+                                   MoneyFactory::Dollar(4))
+                                      .times(2),
+                              Currency::USD),
+                  MoneyFactory::Dollar(12));
 }
